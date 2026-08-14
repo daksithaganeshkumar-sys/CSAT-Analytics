@@ -45,7 +45,7 @@ PREDS_CSV = "evaluation_predictions.csv"
 
 
 def load(path):
-    with open(path, newline="", encoding="utf-8") as f:
+    with open(path, newline="", encoding="utf-8-sig") as f:
         return {r["review_id"]: r for r in csv.DictReader(f)}
 
 
