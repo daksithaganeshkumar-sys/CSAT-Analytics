@@ -1,0 +1,151 @@
+review_id,sentiment,categories
+2328,positive,Staff Service | Food & Beverages | Seat Comfort | Inflight Entertainment | Boarding & Check-in
+831,negative,Seat Comfort | Staff Service | Food & Beverages | Lounge | Delays & Punctuality | Baggage | Value for Money
+679,positive,Seat Comfort | Legroom | Staff Service | Food & Beverages | Inflight Entertainment | Cabin Condition
+1888,positive,Boarding & Check-in | Staff Service | Food & Beverages
+2894,negative,Staff Service | Food & Beverages | Cabin Condition
+2699,positive,Staff Service | Seat Comfort | Legroom | Cleanliness | Cabin Condition | Value for Money
+4973,mixed,Food & Beverages | Cleanliness | Staff Service
+4311,negative,Delays & Punctuality | Boarding & Check-in | Food & Beverages | Staff Service | Cabin Condition
+7260,negative,Delays & Punctuality | Booking & Customer Service | Inflight Entertainment
+2018,negative,Baggage | Staff Service | Booking & Customer Service
+3209,negative,Staff Service | Food & Beverages | Value for Money | Cabin Condition
+2118,mixed,Food & Beverages | Staff Service | Seat Comfort
+381,negative,Staff Service | Cabin Condition | Lounge | Inflight Entertainment
+7424,mixed,Seat Comfort | Staff Service | Food & Beverages | Inflight Entertainment | Lounge
+5267,negative,Seat Comfort | Cabin Condition | Value for Money
+2705,positive,Staff Service | Food & Beverages | Inflight Entertainment | Booking & Customer Service
+3653,negative,Booking & Customer Service | Staff Service | Seat Comfort | Value for Money
+2129,mixed,Seat Comfort | Staff Service | Food & Beverages | Inflight Entertainment | Delays & Punctuality | Boarding & Check-in
+3196,negative,Booking & Customer Service | Delays & Punctuality | Value for Money
+7962,positive,Staff Service | Food & Beverages
+5519,negative,Boarding & Check-in | Staff Service | Baggage
+6128,negative,Delays & Punctuality | Baggage | Food & Beverages | Booking & Customer Service | Cleanliness
+894,positive,Seat Comfort | Staff Service | Food & Beverages | Inflight Entertainment | Delays & Punctuality | Cabin Condition
+7023,negative,Seat Comfort | Food & Beverages | Inflight Entertainment | Lounge | Value for Money
+5408,negative,Delays & Punctuality | Baggage | Staff Service | Value for Money | Booking & Customer Service
+3870,negative,Staff Service | Food & Beverages | Booking & Customer Service
+3949,positive,Seat Comfort | Legroom | Staff Service | Food & Beverages | Inflight Entertainment | Boarding & Check-in
+6780,positive,Food & Beverages | Staff Service | Delays & Punctuality | Value for Money
+4823,mixed,Delays & Punctuality | Boarding & Check-in
+6488,positive,Boarding & Check-in | Seat Comfort | Cabin Condition | Food & Beverages | Inflight Entertainment | Baggage | Value for Money
+1116,mixed,Staff Service | Food & Beverages | Boarding & Check-in | Cabin Condition
+5910,positive,Staff Service | Food & Beverages | Seat Comfort | Inflight Entertainment | Delays & Punctuality
+2512,mixed,Seat Comfort | Legroom | Inflight Entertainment | Staff Service | Cabin Condition | Value for Money
+3780,negative,Booking & Customer Service | Food & Beverages | Cabin Condition | Lounge
+1942,positive,Staff Service | Food & Beverages | Cabin Condition
+3282,negative,Delays & Punctuality | Staff Service
+7889,mixed,Staff Service | Inflight Entertainment | Seat Comfort | Food & Beverages | Boarding & Check-in | Delays & Punctuality | Cabin Condition
+4530,negative,Delays & Punctuality | Boarding & Check-in | Booking & Customer Service | Inflight Entertainment
+3027,negative,Delays & Punctuality | Booking & Customer Service
+1349,mixed,Staff Service | Food & Beverages | Seat Comfort | Legroom | Cabin Condition
+382,mixed,Seat Comfort | Staff Service | Food & Beverages | Inflight Entertainment | Cabin Condition
+5186,negative,Delays & Punctuality | Booking & Customer Service | Staff Service
+3888,negative,Baggage | Staff Service
+5445,negative,Staff Service | Boarding & Check-in | Booking & Customer Service
+6408,positive,Staff Service | Inflight Entertainment | Food & Beverages | Cabin Condition
+5652,negative,Delays & Punctuality | Cabin Condition
+3629,negative,Boarding & Check-in | Staff Service
+2363,positive,Staff Service | Food & Beverages | Seat Comfort | Value for Money
+3730,negative,Staff Service | Baggage | Boarding & Check-in | Delays & Punctuality
+5828,negative,Staff Service | Boarding & Check-in | Delays & Punctuality | Booking & Customer Service
+353,mixed,Seat Comfort | Legroom | Staff Service | Food & Beverages
+2040,positive,Staff Service | Cabin Condition
+1108,negative,Staff Service | Food & Beverages | Inflight Entertainment | Value for Money | Booking & Customer Service
+6244,mixed,Staff Service | Baggage | Food & Beverages
+5598,negative,Staff Service | Boarding & Check-in | Booking & Customer Service
+6622,negative,Delays & Punctuality | Booking & Customer Service | Lounge
+3362,negative,Staff Service | Food & Beverages | Cabin Condition
+3377,positive,Staff Service | Seat Comfort | Food & Beverages | Lounge | Inflight Entertainment | Boarding & Check-in | Cabin Condition
+4931,negative,Booking & Customer Service | Baggage
+737,negative,Seat Comfort | Inflight Entertainment | Cabin Condition | Booking & Customer Service
+3000,negative,Staff Service | Food & Beverages | Booking & Customer Service | Baggage
+2289,mixed,Cleanliness | Seat Comfort | Delays & Punctuality | Food & Beverages | Inflight Entertainment | Booking & Customer Service | Value for Money
+7646,positive,Staff Service | Food & Beverages | Booking & Customer Service | Value for Money
+2175,positive,Seat Comfort | Legroom | Staff Service | Food & Beverages
+914,mixed,Staff Service | Food & Beverages | Seat Comfort | Cabin Condition
+7666,positive,Delays & Punctuality | Cabin Condition | Staff Service | Seat Comfort | Food & Beverages | Lounge
+706,negative,Boarding & Check-in | Inflight Entertainment | Cabin Condition | Staff Service
+1939,positive,Staff Service | Baggage | Value for Money | Cabin Condition
+7771,positive,Staff Service | Lounge | Food & Beverages | Boarding & Check-in
+1015,negative,Seat Comfort | Legroom | Staff Service | Boarding & Check-in
+5724,negative,Boarding & Check-in | Baggage | Staff Service | Booking & Customer Service | Value for Money
+4283,positive,Staff Service | Seat Comfort | Food & Beverages | Baggage | Inflight Entertainment | Boarding & Check-in
+6317,negative,Booking & Customer Service | Boarding & Check-in
+2111,mixed,Boarding & Check-in | Staff Service | Food & Beverages | Cleanliness | Cabin Condition | Inflight Entertainment
+7745,negative,Baggage | Staff Service | Boarding & Check-in
+7065,negative,Inflight Entertainment | Food & Beverages | Seat Comfort | Cabin Condition | Lounge | Staff Service
+1358,negative,Baggage | Booking & Customer Service
+2342,positive,Delays & Punctuality | Staff Service | Baggage
+6628,negative,Seat Comfort | Legroom | Value for Money | Booking & Customer Service
+3696,positive,Boarding & Check-in | Staff Service
+527,positive,Staff Service | Food & Beverages | Seat Comfort | Inflight Entertainment
+371,positive,Boarding & Check-in | Food & Beverages | Value for Money
+4969,positive,Staff Service | Food & Beverages | Value for Money | Cabin Condition
+4554,negative,Cabin Condition | Delays & Punctuality | Staff Service | Booking & Customer Service
+6836,positive,Seat Comfort | Staff Service | Food & Beverages | Inflight Entertainment | Cabin Condition | Delays & Punctuality
+606,positive,Boarding & Check-in | Seat Comfort | Inflight Entertainment | Food & Beverages | Staff Service | Delays & Punctuality
+1983,negative,Staff Service | Booking & Customer Service | Lounge
+1965,mixed,Seat Comfort | Legroom | Staff Service | Delays & Punctuality | Baggage | Inflight Entertainment | Cabin Condition
+5893,negative,Delays & Punctuality | Booking & Customer Service | Staff Service
+5012,negative,Booking & Customer Service | Food & Beverages | Delays & Punctuality
+6874,negative,Booking & Customer Service | Staff Service
+5864,negative,Delays & Punctuality | Baggage | Booking & Customer Service
+7551,positive,Seat Comfort | Legroom | Staff Service | Food & Beverages | Inflight Entertainment | Cabin Condition | Delays & Punctuality
+3984,positive,Staff Service | Cabin Condition
+6854,mixed,Seat Comfort | Staff Service | Food & Beverages | Booking & Customer Service
+1527,positive,Staff Service | Food & Beverages
+8015,negative,Staff Service | Food & Beverages | Value for Money | Cabin Condition
+1481,positive,Staff Service | Boarding & Check-in | Inflight Entertainment
+7318,mixed,Food & Beverages | Seat Comfort | Legroom
+401,negative,Seat Comfort | Legroom | Food & Beverages | Staff Service
+1548,positive,Staff Service | Delays & Punctuality | Cabin Condition
+1011,mixed,Staff Service | Cleanliness | Cabin Condition | Boarding & Check-in
+57,negative,Booking & Customer Service | Boarding & Check-in | Value for Money
+2923,negative,Staff Service | Food & Beverages | Cabin Condition | Inflight Entertainment
+5193,positive,Delays & Punctuality | Staff Service | Food & Beverages | Booking & Customer Service
+3752,negative,Staff Service | Food & Beverages | Seat Comfort | Value for Money | Lounge
+947,mixed,Delays & Punctuality | Food & Beverages | Inflight Entertainment | Staff Service | Cabin Condition
+6028,positive,Lounge | Boarding & Check-in | Staff Service | Food & Beverages | Inflight Entertainment | Delays & Punctuality
+6823,negative,Delays & Punctuality | Booking & Customer Service | Staff Service | Baggage
+3611,negative,Baggage | Booking & Customer Service | Value for Money
+3345,negative,Seat Comfort | Cabin Condition | Booking & Customer Service | Staff Service
+2189,positive,Staff Service | Cleanliness | Food & Beverages | Inflight Entertainment | Delays & Punctuality | Boarding & Check-in
+1387,positive,Delays & Punctuality | Staff Service | Food & Beverages
+1584,positive,Boarding & Check-in | Staff Service | Seat Comfort | Food & Beverages | Delays & Punctuality | Lounge
+2599,negative,Delays & Punctuality | Boarding & Check-in | Staff Service | Booking & Customer Service | Baggage
+7043,mixed,Staff Service | Baggage | Cabin Condition | Food & Beverages
+1078,positive,Staff Service | Lounge | Booking & Customer Service
+6979,negative,Seat Comfort | Legroom | Booking & Customer Service | Cabin Condition | Value for Money
+323,mixed,Staff Service | Food & Beverages
+4508,negative,Delays & Punctuality | Baggage | Booking & Customer Service | Cabin Condition
+836,negative,Booking & Customer Service
+5856,positive,Seat Comfort | Legroom | Inflight Entertainment | Food & Beverages | Staff Service | Cabin Condition
+1098,negative,Delays & Punctuality | Boarding & Check-in
+7994,positive,Staff Service
+1923,negative,Food & Beverages | Seat Comfort | Inflight Entertainment
+7107,negative,Booking & Customer Service | Baggage | Delays & Punctuality | Staff Service
+2317,positive,Seat Comfort | Legroom | Staff Service | Food & Beverages | Cabin Condition
+3283,negative,Boarding & Check-in | Cabin Condition | Staff Service | Legroom | Seat Comfort | Food & Beverages
+1059,negative,Seat Comfort | Legroom | Staff Service | Booking & Customer Service | Delays & Punctuality
+1406,positive,Staff Service
+3764,negative,Staff Service | Food & Beverages | Seat Comfort | Value for Money
+7801,mixed,Boarding & Check-in | Delays & Punctuality | Cleanliness | Seat Comfort | Food & Beverages | Inflight Entertainment | Staff Service | Cabin Condition
+4023,positive,Staff Service | Food & Beverages | Inflight Entertainment | Seat Comfort | Value for Money
+6350,negative,Boarding & Check-in | Staff Service | Food & Beverages | Cabin Condition
+2757,positive,Staff Service | Booking & Customer Service
+6406,negative,Delays & Punctuality | Booking & Customer Service
+6645,negative,Seat Comfort | Value for Money
+3812,negative,Staff Service | Food & Beverages | Value for Money
+5133,negative,Food & Beverages | Seat Comfort | Boarding & Check-in
+7086,positive,Staff Service | Food & Beverages | Cabin Condition
+7129,negative,Baggage | Delays & Punctuality | Staff Service | Food & Beverages | Legroom | Inflight Entertainment
+308,mixed,Boarding & Check-in | Food & Beverages | Inflight Entertainment | Staff Service | Cabin Condition
+1381,positive,Staff Service | Seat Comfort | Food & Beverages | Inflight Entertainment | Booking & Customer Service
+5354,negative,Seat Comfort | Staff Service | Boarding & Check-in | Cabin Condition
+7093,positive,Seat Comfort | Staff Service | Food & Beverages | Inflight Entertainment | Delays & Punctuality | Lounge
+1875,positive,Staff Service | Cabin Condition | Food & Beverages | Cleanliness | Seat Comfort
+7392,positive,Staff Service | Food & Beverages | Cabin Condition
+7605,positive,Staff Service | Food & Beverages | Inflight Entertainment | Cleanliness | Seat Comfort | Legroom
+2192,mixed,Legroom | Staff Service | Inflight Entertainment | Delays & Punctuality | Cabin Condition | Food & Beverages
+6743,positive,Seat Comfort | Legroom | Boarding & Check-in | Delays & Punctuality | Food & Beverages
