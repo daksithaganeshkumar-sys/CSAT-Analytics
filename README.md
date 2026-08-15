@@ -100,12 +100,12 @@ imply it read every review.
 
 ## Evaluation
 
-The project includes a reproducible **cross-model evaluation** in `evaluation/`:
-Claude's classifications are compared against **independently generated ChatGPT
-labels** to measure agreement, and summary quality is assessed with an
-**LLM-as-a-judge** rubric (ChatGPT judging Claude's summaries). It draws a
-stratified sample (by sentiment x airline, fixed seed), keeps the two label sets
-in separate files, and scores with scikit-learn.
+The project includes a reproducible cross-model evaluation in `evaluation/`.
+Claude's sentiment and category classifications are compared against independently
+generated ChatGPT labels to measure agreement. The evaluation framework also
+includes an LLM-as-a-judge rubric for summary faithfulness, main-point coverage,
+and unsupported information, but **summary scoring was not completed in the
+current run** (the summary columns were left blank).
 
 **Current result — cross-model agreement (Claude vs. ChatGPT), not
 human-ground-truth accuracy.** On a stratified 150-review sample:
@@ -200,7 +200,10 @@ python label_reviews.py --input ../reviews_to_process.csv --limit 0    # all row
 ```bash
 cd evaluation
 python create_evaluation_sample.py --input ../reviews_final.csv --n 150 --seed 42
-# fill gt_sentiment (and gt_categories) in human_labeling_sample.csv, then:
+# For the reported cross-model run: reference labels in human_labeling_sample.csv
+# were generated independently with ChatGPT (outside the repo — no automated
+# ChatGPT-labeling script exists here). For a future human-annotation pass,
+# fill human_sentiment and human_categories manually before running:
 python evaluate_labels.py
 ```
 
