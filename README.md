@@ -41,7 +41,7 @@ Structured labeled dataset  (reviews_final.csv)
 Deterministic analytics dashboard  (filters, %s, topic/keyword counts)
         |
         v
-Optional live Claude synthesis  (full-selection aggregates + representative sample)
+Optional live Claude synthesis  (full-selection aggregates + representative stratified sample)
 ```
 
 ## What the AI does vs. what normal code does
@@ -89,34 +89,38 @@ imply it read every review.
 - **Explicit invalid sentiment.** In the dashboard, an unrecognized sentiment
   value becomes an explicit `invalid` state and is excluded from percentages — it
   is never coerced into `mixed`.
-- **Representative sampling.** The live AI layer samples reviews stratified by
-  sentiment and airline (not the first N rows), so the qualitative sample isn't
-  biased by file order.
+- **Representative stratified sampling.** For the live AI layer, Claude receives
+  aggregate metrics across the full selected dataset plus a **representative
+  stratified sample of up to 60 review texts** (stratified by sentiment and
+  airline). Selection is deterministic and independent of CSV row order (it ranks
+  records by a stable hash of `review_id`), so it isn't biased by file order. The
+  60 texts provide qualitative context; they are not used to estimate the
+  population percentages, which are computed deterministically over the full
+  selection.
 
 ## Evaluation
 
-A reproducible evaluation workflow is included in `evaluation/`. It draws a
+The project includes a reproducible **cross-model evaluation** in `evaluation/`:
+Claude's classifications are compared against **independently generated ChatGPT
+labels** to measure agreement, and summary quality is assessed with an
+**LLM-as-a-judge** rubric (ChatGPT judging Claude's summaries). It draws a
 stratified sample (by sentiment x airline, fixed seed), keeps the two label sets
-in separate files, and scores sentiment (agreement, per-class precision/recall/F1,
-confusion matrix) and multi-label categories (micro/macro/weighted P/R/F1,
-exact-match) with scikit-learn.
+in separate files, and scores with scikit-learn.
 
-**Current result — inter-model agreement study (not human-validated accuracy).**
-On a stratified 150-review sample, I measured agreement between the pipeline's
-labels (Claude) and a second, independently-prompted LLM used as a comparison
-annotator:
+**Current result — cross-model agreement (Claude vs. ChatGPT), not
+human-ground-truth accuracy.** On a stratified 150-review sample:
 
-- **Sentiment agreement: 92.7%** (macro-F1 0.897). Agreement is strongest on
-  positive/negative; `mixed` is the hardest class (F1 0.784).
-- **Category agreement (multi-label): micro-F1 0.897**, exact-match 0.460.
-  Per-tag agreement is high; the models most often differ on a single tag.
-  Lowest-agreement categories: *Value for Money* (recall 0.421) and
-  *Cabin Condition* (F1 0.714).
+- **Sentiment: 92.7% cross-model agreement** (macro-F1 0.897). Agreement is
+  strongest on positive/negative; `mixed` is the hardest class (F1 0.784).
+- **Categories (multi-label): micro-F1 0.897**, exact-match 0.460. Per-tag
+  agreement is high; the models most often differ on a single tag. Lowest-agreement
+  categories: *Value for Money* (recall 0.421) and *Cabin Condition* (F1 0.714).
 
-**Important:** both label sets are model-generated, so this measures *consistency
-between models*, not correctness. It is an inter-annotator-style agreement signal,
-**not** a human-validated accuracy score. A human-labeled evaluation is the
-planned next step. Full numbers and methodology are in
+**Important:** ChatGPT is an independent *model* evaluator, not human ground
+truth. Both models may share biases, and high agreement does not guarantee factual
+correctness. This measures **cross-model consistency, not human-validated
+accuracy** — independent human annotation would be a stronger next validation step.
+Full numbers and methodology are in
 [`evaluation/results.md`](evaluation/results.md).
 
 ## Security
@@ -148,9 +152,9 @@ time-series analysis is provided (see Limitations).
 
 ## Limitations
 
-- **Labels are LLM-generated** and have so far been checked only via an
-  inter-model agreement study, not against human ground truth; a human-labeled
-  evaluation is the planned next step.
+- **Labels are LLM-generated** and have so far been checked only via a
+  cross-model agreement study (Claude vs. ChatGPT), not against human ground
+  truth; independent human annotation is the planned next validation step.
 - **No temporal data** in the processed dataset, so trend/over-time analysis is
   intentionally omitted rather than fabricated.
 - **Free-form keywords are fragmented** ("flight delay", "delayed flight",
@@ -191,7 +195,7 @@ python label_reviews.py --input ../reviews_to_process.csv --limit 0    # all row
 > `reviews_final.csv` in this repo is the labeled *output*; the raw input is not
 > committed.
 
-**Evaluation** (agreement study now; supports human ground-truth labeling next):
+**Evaluation** (cross-model agreement with ChatGPT; supports human labeling next):
 
 ```bash
 cd evaluation
@@ -221,7 +225,7 @@ ai-customer-feedback-analytics/
 ├── worker/
 │   └── worker.js           # Cloudflare Worker proxy for the live AI layer
 │
-└── evaluation/             # human-labeled evaluation workflow (results pending)
+└── evaluation/             # cross-model (Claude-vs-ChatGPT) evaluation workflow
     ├── create_evaluation_sample.py
     ├── evaluate_labels.py
     ├── LABELING_GUIDE.md

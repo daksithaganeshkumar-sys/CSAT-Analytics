@@ -196,7 +196,7 @@
     </div>
     <input type="file" id="fileInput" accept=".csv" hidden>
     <div class="err" id="err"></div>
-    <div class="privacy"><b>&#9670;</b> Runs entirely in your browser. Nothing is uploaded anywhere.</div>
+    <div class="privacy"><b>&#9670;</b> Local by default. Your CSV stays in your browser. If you use Ask AI, aggregate metrics and a representative sample of review text are sent securely through the AI service.</div>
   </section>
   <section id="dash">
     <div class="sample-banner" id="sampleBanner">
@@ -275,7 +275,7 @@
           <button class="btn" id="aiLiveBtn" type="button">Ask AI about this view</button>
         </div>
       </div>
-      <div class="ai-out" id="aiOut"><em><b style="color:var(--text)">Instant insights</b> are calculated deterministically from the pre-generated labels across the full selection &mdash; no model call. <b style="color:var(--text)">Ask AI</b> sends aggregate metrics plus a representative sample to Claude for a live synthesis.</em></div>
+      <div class="ai-out" id="aiOut"><em><b style="color:var(--text)">Instant insights</b> are calculated deterministically from the pre-generated labels across the full selection &mdash; no model call. <b style="color:var(--text)">Ask AI</b> sends aggregate metrics from the full selection plus a representative stratified sample of up to 60 review texts to Claude for a live synthesis.</em></div>
     </div>
     <div class="card reviews-card">
       <div class="reviews-head">
@@ -1610,7 +1610,9 @@ document.addEventListener("DOMContentLoaded", function(){
       if(airline==null||String(rev==null?"":rev).trim()===""){skipped++;continue;}
       const sentiment=normSent(sentRaw);
       if(sentiment==="invalid")invalidSent++;
+      const rid=pick(r,["review_id","Review_ID","id","ID"]);
       clean.push({
+        review_id: rid!=null && String(rid).trim()!=="" ? String(rid).trim() : null,
         airline:String(airline).trim(),
         sentiment,
         keywords:splitTags(pick(r,["keywords","Keywords"])),
@@ -2076,68 +2078,90 @@ document.addEventListener("DOMContentLoaded", function(){
   // P0.4: representative sample stratified by sentiment, then by airline within
   // each sentiment, allocating slots proportional to each group's share of the
   // selection. Degrades cleanly for tiny/imbalanced/single-group selections.
-  function getRepresentativeSample(rows,maxSize){
-    if(rows.length<=maxSize) return rows.slice();
-    // group by sentiment
-    const bySent={};
-    rows.forEach(d=>{(bySent[d.sentiment]=bySent[d.sentiment]||[]).push(d);});
-    const out=[];
-    const sentKeys=Object.keys(bySent);
-    // Reserve one guaranteed slot per present group so minorities are never dropped,
-    // then distribute the remaining slots proportionally.
-    const guaranteed=sentKeys.length;
-    const remaining=Math.max(0,maxSize-guaranteed);
-    let allocated=0;
-    sentKeys.forEach((s,idx)=>{
-      let slots=1+Math.round(remaining*bySent[s].length/rows.length);
-      if(idx===sentKeys.length-1) slots=Math.max(1,maxSize-allocated); // absorb rounding
-      slots=Math.min(slots,bySent[s].length);
-      allocated+=slots;
-      out.push(...stratifyByAirline(bySent[s],slots));
+  // ---- deterministic, order-independent representative sampling ----
+  // A small stable string hash (FNV-1a). Same string -> same number, always.
+  function stableHash(str){
+    let h=0x811c9dc5;
+    for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,0x01000193); }
+    return h>>>0;
+  }
+  // Stable sort key for a record: prefer review_id; else a content hash. This is
+  // what makes selection independent of CSV row order / insertion order.
+  function sampleKey(d){
+    const basis = (d.review_id!=null && d.review_id!=="")
+      ? "id:"+d.review_id
+      : "c:"+d.airline+"|"+d.sentiment+"|"+d.review;
+    return stableHash(basis);
+  }
+  // group identity key for stable tie-breaking
+  let __keyOf = g => (g.__key||"");
+  function keyOf(g){ return __keyOf(g); }
+  // Largest-remainder allocation of `cap` across `groups`. Deterministic; never
+  // exceeds cap or a group's own size. Returns Map(group -> slots).
+  function largestRemainder(groups, cap, sizeOf){
+    const total = groups.reduce((s,g)=>s+sizeOf(g),0);
+    const alloc = new Map();
+    let assigned=0; const rema=[];
+    groups.forEach(g=>{
+      const exact = total? cap*sizeOf(g)/total : 0;
+      const base = Math.min(Math.floor(exact), sizeOf(g));
+      alloc.set(g, base); assigned+=base;
+      rema.push([g, exact-Math.floor(exact)]);
     });
-    return out.slice(0,maxSize);
+    let left = cap-assigned;
+    rema.sort((a,b)=> b[1]-a[1] || sizeOf(b[0])-sizeOf(a[0]) || (keyOf(a[0])<keyOf(b[0])?-1:1));
+    for(let i=0;i<rema.length && left>0;i++){
+      const g=rema[i][0];
+      if(alloc.get(g) < sizeOf(g)){ alloc.set(g, alloc.get(g)+1); left--; }
+    }
+    return alloc;
+  }
+  // sort a set of records by their stable hash key (order-independent)
+  function sortByKey(arr){
+    return arr.slice().sort((a,b)=>{
+      const ha=sampleKey(a), hb=sampleKey(b);
+      return ha-hb || (a.review<b.review?-1:1);
+    });
   }
 
-  // within a sentiment group, spread the slots across airlines proportionally,
-  // sampling evenly across each airline's rows to avoid file-order bias.
-  function stratifyByAirline(group,slots){
-    if(group.length<=slots) return group.slice();
-    const byAir={};
-    group.forEach(d=>{(byAir[d.airline]=byAir[d.airline]||[]).push(d);});
-    const airKeys=Object.keys(byAir);
-
-    // Fair allocation of `slots` across airlines using the largest-remainder
-    // method. This removes the previous first-airline bias: when slots < number
-    // of airlines, the airlines that receive a slot are chosen by largest
-    // fractional share (ties broken by group size then name), NOT by iteration
-    // order or a trailing slice(). Deterministic and independent of CSV order.
-    const alloc={};
-    let assigned=0;
-    const frac=[];
-    airKeys.forEach(a=>{
-      const exact=slots*byAir[a].length/group.length;
-      const base=Math.floor(exact);
-      alloc[a]=base; assigned+=base;
-      frac.push([a, exact-base, byAir[a].length]);
+  function getRepresentativeSample(rows, maxSize){
+    if(rows.length<=maxSize) return rows.slice();
+    // explicit, stable sentiment order (only those present)
+    const order=["positive","negative","mixed"];
+    const bySent=new Map();
+    rows.forEach(d=>{ (bySent.get(d.sentiment)||bySent.set(d.sentiment,[]).get(d.sentiment)).push(d); });
+    const sentGroups = order.filter(s=>bySent.has(s)).map(s=>{ const a=bySent.get(s); a.__key=s; return a; });
+    // guarantee >=1 per present sentiment, then largest-remainder the rest by size
+    __keyOf = g => g.__key;
+    const guaranteed = sentGroups.length;
+    const rest = Math.max(0, maxSize - guaranteed);
+    const restAlloc = largestRemainder(sentGroups, rest, g=>g.length);
+    const out=[]; let used=0;
+    sentGroups.forEach(g=>{
+      let slots = Math.min(1 + restAlloc.get(g), g.length);
+      slots = Math.min(slots, maxSize-used);
+      used += slots;
+      out.push(...pickWithinSentiment(g, slots));
     });
-    let remaining=slots-assigned;
-    frac.sort((x,y)=> y[1]-x[1] || y[2]-x[2] || (x[0]<y[0]?-1:1));
-    for(let i=0;i<frac.length && remaining>0;i++){ alloc[frac[i][0]]++; remaining--; }
+    return out.slice(0, maxSize);
+  }
 
+  // within a sentiment stratum: proportional airline allocation (largest
+  // remainder), then stable-hash ordering to choose which reviews.
+  function pickWithinSentiment(group, slots){
+    if(group.length<=slots) return sortByKey(group);
+    const byAir=new Map();
+    group.forEach(d=>{ (byAir.get(d.airline)||byAir.set(d.airline,[]).get(d.airline)).push(d); });
+    const airGroups=[...byAir.entries()].map(([name,arr])=>{ arr.__key=name; return arr; })
+      .sort((a,b)=> a.__key<b.__key?-1:1);
+    __keyOf = g => g.__key;
+    const alloc=largestRemainder(airGroups, slots, g=>g.length);
     const out=[];
-    airKeys.forEach(a=>{
-      const n=Math.min(alloc[a],byAir[a].length);
-      if(n>0) out.push(...evenSpread(byAir[a],n));
+    airGroups.forEach(g=>{
+      const n=Math.min(alloc.get(g), g.length);
+      if(n>0) out.push(...sortByKey(g).slice(0,n));
     });
     return out.slice(0,slots);
-  }
-
-  // pick n items spread evenly across the array (not the first n) -> removes ordering bias.
-  function evenSpread(arr,n){
-    if(n>=arr.length) return arr.slice();
-    const step=arr.length/n, out=[];
-    for(let i=0;i<n;i++) out.push(arr[Math.floor(i*step)]);
-    return out;
   }
   el.aiLiveBtn.addEventListener("click",async ()=>{
     if(!WORKER_URL){
@@ -2155,14 +2179,18 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const label=el.aiLiveBtn.textContent;
     el.aiLiveBtn.disabled=true;el.aiLiveBtn.textContent="Thinking\u2026";
-    el.aiOut.innerHTML='<em>Analyzing metrics from all '+selection.total_reviews.toLocaleString()+' selected reviews and a representative sample of '+sample.length+'\u2026</em>';
+    el.aiOut.innerHTML='<em>Analyzing aggregate metrics from all '+selection.total_reviews.toLocaleString()+' selected reviews plus a representative stratified sample of '+(sample.length<selection.total_reviews?('up to '+sample.length):('all '+sample.length))+' review texts\u2026</em>';
     try{
       const res=await fetch(WORKER_URL,{method:"POST",headers:{"content-type":"application/json"},
         body:JSON.stringify({selection:selection,sample:{sample_size:sample.length,reviews:sample},filters:filterLabel()})});
       const data=await res.json();
       if(data.sections){
         const s=data.sections;
-        const prov='Analysis uses aggregate metrics from all '+selection.total_reviews.toLocaleString()+' selected reviews plus a representative sample of '+sample.length+' review texts.';
+        const total=selection.total_reviews;
+        const sampledAll = sample.length >= total;
+        const prov = sampledAll
+          ? 'Analysis uses aggregate metrics from all '+total.toLocaleString()+' selected reviews plus all '+sample.length+' available review texts.'
+          : 'Analysis uses aggregate metrics from all '+total.toLocaleString()+' selected reviews plus a representative stratified sample of '+sample.length+' review texts.';
         el.aiOut.innerHTML=
           '<div class="ai-live"><span class="tag" style="background:var(--accent)">Live</span>'+
           '<span class="ai-mood">'+esc(s.mood||"")+'</span></div>'+
