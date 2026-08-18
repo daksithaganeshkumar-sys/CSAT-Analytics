@@ -300,7 +300,7 @@ function buildCloud(rows, cloudEl, cloudEmptyEl, wordMetaRef) {
     });
   });
 
-  const list = [...wordMetaRef.values()].sort((a, b) => b.count - a.count).slice(0, 60).map(m => [m.label, m.count]);
+  const list = [...wordMetaRef.values()].sort((a, b) => b.count - a.count).slice(0, 42).map(m => [m.label, m.count]);
   const empty = !list.length;
   cloudEmptyEl.classList.toggle("on", empty);
   if (empty) {
@@ -316,12 +316,15 @@ function buildCloud(rows, cloudEl, cloudEmptyEl, wordMetaRef) {
 
   WordCloud(cloudEl, {
     list,
-    gridSize:       Math.max(4, Math.round(w / 60)),
-    weightFactor:   n => Math.max(10, Math.min(60, n * 2.8)),
-    fontFamily:     "system-ui, sans-serif",
-    color:          () => Object.values(SENTIMENT_COLORS)[Math.floor(Math.random() * 3)],
+    gridSize:       Math.max(8, Math.round(w / 48)),
+    weightFactor:   n => Math.max(13, Math.min(44, n * 2.2)),
+    fontFamily:     "Inter, system-ui, sans-serif",
+    fontWeight:     "600",
+    color:          (_word, weight) => weight > 100 ? "#0f5c73" : weight > 45 ? "#167c8d" : "#4b6473",
     rotateRatio:    0,
-    backgroundColor: "transparent",
+    backgroundColor: "#ffffff",
+    drawOutOfBound: false,
+    shrinkToFit: true,
   });
   cloudBuilt = true;
 }
