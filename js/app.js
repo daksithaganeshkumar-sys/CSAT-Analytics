@@ -421,14 +421,38 @@ function loadFile(file) {
  * This is what makes the GitHub Pages demo immediately useful.
  */
 async function autoLoadBundledCSV() {
+  const title = el.uploader.querySelector("h2");
+  const intro = el.uploader.querySelector("p");
+  const sampleBtn = document.getElementById("sampleBtn");
+  const originalTitle = title.textContent;
+  const originalIntro = intro.textContent;
+
   try {
+    el.uploader.classList.add("loading");
+    title.textContent = "Loading the airline review dashboard…";
+    intro.textContent = "Preparing 8,100 AI-labeled reviews. This may take a few seconds.";
+    sampleBtn.disabled = true;
     const res = await fetch("reviews_final.csv");
-    if (!res.ok) return; // silently skip — user can upload manually
+    if (!res.ok) throw new Error("Bundled dataset unavailable");
     const text = await res.text();
-    const result = Papa.parse(text, { header: true, skipEmptyLines: true });
-    ingest(result.data);
+    Papa.parse(text, {
+      header: true,
+      skipEmptyLines: true,
+      worker: true,
+      complete: result => ingest(result.data),
+      error: () => {
+        el.uploader.classList.remove("loading");
+        title.textContent = originalTitle;
+        intro.textContent = originalIntro;
+        sampleBtn.disabled = false;
+      },
+    });
   } catch (_) {
     // Network unavailable or file not found — dashboard shows the uploader.
+    el.uploader.classList.remove("loading");
+    title.textContent = originalTitle;
+    intro.textContent = originalIntro;
+    sampleBtn.disabled = false;
   }
 }
 
