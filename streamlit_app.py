@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from html import escape
 from pathlib import Path
 
 import altair as alt
@@ -222,14 +223,16 @@ else:
 
 for row in reviews.itertuples():
     color = COLORS.get(row.sentiment, "#607986")
-    summary = str(getattr(row, "summary", "")).strip()
-    categories = " · ".join(split_values(pd.Series([getattr(row, "categories", "")])))
+    summary = escape(str(getattr(row, "summary", "")).strip())
+    categories = escape(" · ".join(split_values(pd.Series([getattr(row, "categories", "")]))))
+    airline = escape(str(row.Airline))
+    review_text = escape(str(row.Reviews))
     st.markdown(
         f"""
         <div class="review">
-          <div class="review-top">{row.Airline} <span class="tag" style="background:{color}">{row.sentiment.title()}</span></div>
+          <div class="review-top">{airline} <span class="tag" style="background:{color}">{row.sentiment.title()}</span></div>
           <div class="small-note">{categories}</div>
-          <div class="review-text">{row.Reviews}</div>
+          <div class="review-text">{review_text}</div>
           {f'<div class="small-note"><strong>AI summary:</strong> {summary}</div>' if summary else ''}
         </div>
         """,
@@ -237,4 +240,3 @@ for row in reviews.itertuples():
     )
 
 st.caption(f"Showing {min(20, len(reviews))} representative reviews from {len(filtered):,} matching records.")
-
