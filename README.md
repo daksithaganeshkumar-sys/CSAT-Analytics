@@ -8,7 +8,7 @@ live AI synthesis layer.
 > This project analyzes customer reviews and sentiment. It does **not** compute
 > a traditional CSAT survey score, and sentiment percentages here are not CSAT.
 
-**Live demo:** https://daksithaganeshkumar-sys.github.io/ai-customer-feedback-analytics/
+**Live demo:** https://ai-customer-feedback-analytics-hwmpvt8c5pao4gtsj6vdq3.streamlit.app/
 
 `~8,100 reviews` · `10 airlines` · `AI-labeled` · `Interactive dashboard`
 
