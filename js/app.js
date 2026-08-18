@@ -30,7 +30,7 @@ import {
   initVizTabs,
   scheduleCloud,
   resetCloud,
-} from "./charts.js";
+} from "./charts.js?v=20260818-light-refresh";
 
 import { buildInstantInsights, askAI, WORKER_URL } from "./ai.js";
 
